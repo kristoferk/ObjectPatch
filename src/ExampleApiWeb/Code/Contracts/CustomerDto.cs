@@ -1,9 +1,9 @@
-﻿using SimpleObjectPatch;
-using System;
+﻿using System;
+using SimpleObjectPatch;
 
-namespace ExampleApiWeb.Model
+namespace ExampleApiWeb.Code.Contracts
 {
-    public class Customer
+    public class CustomerDto
     {
         public int Id { get; set; }
 

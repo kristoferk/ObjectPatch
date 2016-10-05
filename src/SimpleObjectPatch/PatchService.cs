@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace SimpleObjectPatch
 {
@@ -12,15 +14,14 @@ namespace SimpleObjectPatch
 
         public PatchService(JsonSerializer serializer = null)
         {
-            _serializer = serializer;
+            _serializer = serializer ?? new JsonSerializer();
         }
 
         public T ApplyPatch<T>(JObject input, T original, params Expression<Func<T, object>>[] actions) where T : class, new()
         {
-            var actualProperties = typeof(T).GetProperties();
-            var obj = input.ToObject<T>(_serializer);
-
-            var propertyNames = actions.Select(a => GetPropertyName(a.Body)).ToList();
+            PropertyInfo[] allPropertiesOnType = typeof(T).GetProperties();
+            T objectFromInput = input.ToObject<T>(_serializer);
+            var propertyNames = GetPatchablePropertyNames(actions, allPropertiesOnType);
 
             //Properties in dynamic object
             foreach (var prop in input.Properties())
@@ -28,15 +29,41 @@ namespace SimpleObjectPatch
                 string propertyName = prop.Name;
                 if (propertyNames.Contains(propertyName))
                 {
-                    var actualProperty = actualProperties.First(f => f.Name == propertyName);
+                    var actualProperty = allPropertiesOnType.First(f => f.Name == propertyName);
                     if (actualProperty.CanWrite)
                     {
-                        actualProperty.SetValue(original, actualProperty.GetValue(obj));
+                        var patchable = actualProperty.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
+                        if (patchable == null || patchable.Patchable)
+                        {
+                            actualProperty.SetValue(original, actualProperty.GetValue(objectFromInput));
+                        }                        
                     }
                 }
             }
 
             return original;
+        }
+
+        private static List<string> GetPatchablePropertyNames<T>(Expression<Func<T, object>>[] actions, PropertyInfo[] allPropertiesOnType) where T : class, new()
+        {
+            var patchablePropertyNames = new List<string>();
+            if (actions.Any())
+            {
+                patchablePropertyNames.AddRange(actions.Select(a => GetPropertyName(a.Body)).ToList());
+            }
+            else
+            {
+                foreach (PropertyInfo property in allPropertiesOnType)
+                {
+                    var patchable = property.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
+                    if (patchable == null || patchable.Patchable)
+                    {
+                        patchablePropertyNames.Add(property.Name);
+                    }                    
+                }                
+            }
+
+            return patchablePropertyNames;
         }
 
         private static string GetPropertyName(Expression expression)
