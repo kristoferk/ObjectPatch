@@ -1,8 +1,6 @@
-﻿using SimpleObjectPatch;
-using System;
-using System.Net;
+﻿using System.Net;
 
-namespace ExampleApiWeb.Model
+namespace ExampleApiWeb.Api.v1.Contracts
 {
     public class Error
     {
@@ -10,5 +8,4 @@ namespace ExampleApiWeb.Model
 
         public string Message { get; set; }
     }
-
 }

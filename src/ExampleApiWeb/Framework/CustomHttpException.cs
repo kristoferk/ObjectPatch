@@ -1,6 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using ExampleApiWeb.Api.v1.Contracts;
 using ExampleApiWeb.Model;
+using System;
+using System.Net;
 
 namespace ExampleApiWeb.Code
 {

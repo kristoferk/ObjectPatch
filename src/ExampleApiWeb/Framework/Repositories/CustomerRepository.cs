@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using ExampleApiWeb.Code.Repository;
 using ExampleApiWeb.Model;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
-namespace ExampleApiWeb.Code.Repository
+namespace ExampleApiWeb.Framework.Repositories
 {
-    public class CustomerRepository 
+    public class CustomerRepository
     {
         public Customer Get(int id)
         {
@@ -13,7 +14,6 @@ namespace ExampleApiWeb.Code.Repository
                 Name = "Test"
             };
         }
-
 
         public Customer Create(Customer value)
         {
@@ -24,7 +24,6 @@ namespace ExampleApiWeb.Code.Repository
         {
             return value;
         }
-
 
         public void Delete(int id, bool hardDelete = false)
         {
@@ -38,6 +37,10 @@ namespace ExampleApiWeb.Code.Repository
             });
         }
 
+        public Task<ApiCollection<Customer>> GetAsync(CustomerFilter filter)
+        {
+            return Task.FromResult(new ApiCollection<Customer>());
+        }
 
         public Task<Customer> CreateAsync(Customer value)
         {
@@ -48,7 +51,6 @@ namespace ExampleApiWeb.Code.Repository
         {
             return Task.FromResult(value);
         }
-
 
         public Task DeleteAsync(int id, bool hardDelete = false)
         {

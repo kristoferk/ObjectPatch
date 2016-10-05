@@ -1,7 +1,7 @@
-﻿using System;
-using SimpleObjectPatch;
+﻿using SimpleObjectPatch;
+using System;
 
-namespace ExampleApiWeb.Code.Contracts
+namespace ExampleApiWeb.Api.v1.Contracts
 {
     public class CustomerDto
     {
@@ -15,6 +15,7 @@ namespace ExampleApiWeb.Code.Contracts
 
         [Patchable(false)]
         public int Page { get; set; } = 1;
+
         public int PageSize { get; set; } = 1000;
 
         public TestType TestType { get; set; }

@@ -1,16 +1,19 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
+using ExampleApiWeb.Api.v1.Contracts;
 using ExampleApiWeb.Code;
-using ExampleApiWeb.Code.Contracts;
 using ExampleApiWeb.Code.Repository;
-using ExampleApiWeb.Code.Validation;
+using ExampleApiWeb.Framework;
+using ExampleApiWeb.Framework.Repositories;
+using ExampleApiWeb.Framework.Validation;
 using ExampleApiWeb.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleObjectPatch;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
-namespace ExampleApiWeb.Controllers
+namespace ExampleApiWeb.Api.v1.Controllers
 {
+    [AllowAnonymous]
     [Route("api/v1/[controller]")]
     public class CustomersController : Controller
     {
@@ -19,11 +22,7 @@ namespace ExampleApiWeb.Controllers
         private readonly Validator _validator;
         private readonly IAuthorizationService _authorizationService;
 
-        public CustomersController(
-            CustomerRepository repository, 
-            IMapper mapper, 
-            Validator validator, 
-            IAuthorizationService authorizationService)
+        public CustomersController(CustomerRepository repository, IMapper mapper, Validator validator, IAuthorizationService authorizationService)
         {
             _repository = repository;
             _mapper = mapper;
@@ -36,17 +35,17 @@ namespace ExampleApiWeb.Controllers
         public async Task<CustomerDto> GetById(int id)
         {
             Customer dbObject = await _repository.GetAsync(id);
-            await _authorizationService.AssertAuthorizeAsync(User, dbObject, Requirements.Read);
+            await _authorizationService.AuthorizeAsync(User, dbObject, Requirements.Read);
             return _mapper.Map<CustomerDto>(dbObject);
         }
 
         // GET api/customers/5
         [HttpGet("{id}")]
-        public async Task<CustomerDto> Get(int id)
+        public async Task<ApiCollectionDto<CustomerDto>> Get(CustomerFilterDto dto)
         {
-            Customer dbObject = await _repository.GetAsync(id);
-            await _authorizationService.AssertAuthorizeAsync(User, dbObject, Requirements.Read);
-            return _mapper.Map<CustomerDto>(dbObject);
+            var filter = _mapper.Map<CustomerFilter>(dto);
+            ApiCollection<Customer> list = await _repository.GetAsync(filter);
+            return _mapper.Map<ApiCollectionDto<CustomerDto>>(list);
         }
 
         // POST api/customers
@@ -81,6 +80,8 @@ namespace ExampleApiWeb.Controllers
         [HttpDelete("{id}")]
         public async Task<bool> Delete(int id, [FromBody] CustomerDto value, bool hardDelete = false)
         {
+            value = value ?? new CustomerDto();
+            CheckRequestIdentity.AssertEqualId(id, value.Id, i => value.Id = i);
             _validator.ValidateAndThrow(value, RuleSet.Delete);
             await _authorizationService.AssertAuthorizeAsync(User, value, Requirements.Delete);
             await _repository.DeleteAsync(id, hardDelete);

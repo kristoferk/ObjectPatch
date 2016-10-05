@@ -1,11 +1,12 @@
-﻿using System;
+﻿using ExampleApiWeb.Api.v1.Contracts;
+using ExampleApiWeb.Code;
+using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using ExampleApiWeb.Model;
-using FluentValidation;
 
-namespace ExampleApiWeb.Code.Validation
+namespace ExampleApiWeb.Framework.Validation
 {
     public class Validator
     {
@@ -27,7 +28,7 @@ namespace ExampleApiWeb.Code.Validation
 
             if (validator == null)
             {
-                throw new ArgumentException($"No validator registered for type '{typeof(T).FullName}'.", nameof(instance));
+                return;
             }
 
             var validationResult = validator.Validate(instance, ruleSet: ruleSet);
