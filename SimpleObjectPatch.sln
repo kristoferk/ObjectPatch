@@ -1,22 +1,17 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ExampleApiWeb", "src\ExampleApiWeb\ExampleApiWeb.xproj", "{7BBE1D85-F61D-4404-98C0-CAFE56B789A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApiWeb", "src\ExampleApiWeb\ExampleApiWeb.csproj", "{7BBE1D85-F61D-4404-98C0-CAFE56B789A3}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "SimpleObjectPatch", "src\SimpleObjectPatch\SimpleObjectPatch.xproj", "{C1ABF5D7-E1B9-446D-BC7C-49C90A02AF65}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleObjectPatch", "src\SimpleObjectPatch\SimpleObjectPatch.csproj", "{C1ABF5D7-E1B9-446D-BC7C-49C90A02AF65}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UnitTest", "test\UnitTest\UnitTest.xproj", "{5086A49F-3CF5-43DD-9C85-552B11E430EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "test\UnitTest\UnitTest.csproj", "{5086A49F-3CF5-43DD-9C85-552B11E430EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{134E7C9D-44ED-4402-A051-6D786B7CA198}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{442A1DE8-1264-4716-A75A-F7A76BEA4D7F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3F9D9514-A119-4069-AFDC-73C3CDE0124E}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
