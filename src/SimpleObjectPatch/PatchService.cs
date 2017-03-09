@@ -19,7 +19,7 @@ namespace SimpleObjectPatch
 
         public T ApplyPatch<T>(JObject input, T original, params Expression<Func<T, object>>[] actions) where T : class, new()
         {
-            PropertyInfo[] allPropertiesOnType = typeof(T).GetProperties();
+            PropertyInfo[] allPropertiesOnType = typeof(T).GetTypeInfo().DeclaredProperties.ToArray();
             T objectFromInput = input.ToObject<T>(_serializer);
             var propertyNames = GetPatchablePropertyNames(actions, allPropertiesOnType);
 

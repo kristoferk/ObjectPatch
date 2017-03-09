@@ -8,7 +8,7 @@ using Xunit;
 
 namespace UnitTest
 {
-    public class Class1
+    public class IntegrationTests
     {
         [Fact]
         public async Task TestPostPatch()

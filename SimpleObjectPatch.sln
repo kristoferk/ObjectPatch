@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26114.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApiWeb", "src\ExampleApiWeb\ExampleApiWeb.csproj", "{7BBE1D85-F61D-4404-98C0-CAFE56B789A3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleApiWeb", "test\ExampleApiWeb\ExampleApiWeb.csproj", "{7BBE1D85-F61D-4404-98C0-CAFE56B789A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleObjectPatch", "src\SimpleObjectPatch\SimpleObjectPatch.csproj", "{C1ABF5D7-E1B9-446D-BC7C-49C90A02AF65}"
 EndProject
