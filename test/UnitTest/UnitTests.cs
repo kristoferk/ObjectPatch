@@ -78,7 +78,9 @@ namespace UnitTest
             };
 
             //PatchObject<CustomerDto>
-            var newObject = new PatchObject<CustomerDto>(input).Patch(original, c => c.Notes, c => c.Alias);
+            var newObject = new PatchObject<CustomerDto>(input).Patch(original, 
+                c => c.Notes, 
+                c => c.Alias);
 
             //Explicit patchable but not specified
             Assert.True(newObject.Description == "OldDesc");

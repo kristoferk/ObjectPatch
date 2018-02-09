@@ -32,11 +32,11 @@ namespace SimpleObjectPatch
                     var actualProperty = allPropertiesOnType.First(f => f.Name == propertyName);
                     if (actualProperty.CanWrite)
                     {
-                        var patchable = actualProperty.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
-                        if (patchable == null || patchable.Patchable)
-                        {
+                        //var patchable = actualProperty.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
+                        //if (patchable == null || patchable.Patchable)
+                        //{
                             actualProperty.SetValue(original, actualProperty.GetValue(objectFromInput));
-                        }                        
+                        //}                        
                     }
                 }
             }
