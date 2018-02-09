@@ -5,11 +5,11 @@ using ExampleApiWeb.Code.Repository;
 using ExampleApiWeb.Framework;
 using ExampleApiWeb.Framework.Repositories;
 using ExampleApiWeb.Framework.Validation;
-using ExampleApiWeb.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SimpleObjectPatch;
 using System.Threading.Tasks;
+using ExampleApiWeb.Framework.Models;
 
 namespace ExampleApiWeb.Api.v1.Controllers
 {

@@ -4,7 +4,6 @@ using ExampleApiWeb.Code.Repository;
 using ExampleApiWeb.Framework;
 using ExampleApiWeb.Framework.Repositories;
 using ExampleApiWeb.Framework.Validation;
-using ExampleApiWeb.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using ExampleApiWeb.Framework.Models;
 
 namespace ExampleApiWeb
 {

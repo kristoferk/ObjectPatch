@@ -59,8 +59,8 @@ namespace SimpleObjectPatch
                     if (patchable == null || patchable.Patchable)
                     {
                         patchablePropertyNames.Add(property.Name);
-                    }                    
-                }                
+                    }
+                }
             }
 
             return patchablePropertyNames;

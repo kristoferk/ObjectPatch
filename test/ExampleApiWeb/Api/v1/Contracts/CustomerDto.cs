@@ -13,9 +13,17 @@ namespace ExampleApiWeb.Api.v1.Contracts
         [Patchable]
         public string Description { get; set; } = "Default description";
 
+        public string Notes { get; set; } = "Default notes";
+
+        [Patchable(false)]
+        public string Alias { get; set; }
+
+        [Patchable(1.5)]
+        public string NewAttribute { get; set; }
+
         [Patchable(false)]
         public int Page { get; set; } = 1;
-
+        
         public int PageSize { get; set; } = 1000;
 
         public TestType TestType { get; set; }

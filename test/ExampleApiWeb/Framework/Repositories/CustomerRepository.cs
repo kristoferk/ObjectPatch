@@ -1,7 +1,7 @@
 ﻿using ExampleApiWeb.Code.Repository;
-using ExampleApiWeb.Model;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using ExampleApiWeb.Framework.Models;
 
 namespace ExampleApiWeb.Framework.Repositories
 {

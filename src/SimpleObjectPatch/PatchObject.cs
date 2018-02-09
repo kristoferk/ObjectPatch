@@ -28,6 +28,11 @@ namespace SimpleObjectPatch
     {
         public T Data { get; set; }
 
+        public PatchObject(object obj) : base(FromObject(obj))
+        {
+            Data = Create();
+        }
+
         public PatchObject(JObject obj) : base(obj)
         {
             Data = Create();
@@ -49,10 +54,28 @@ namespace SimpleObjectPatch
     public class PatchableAttribute : Attribute
     {
         public readonly bool Patchable;
+        public readonly double? From;
+        public readonly double? To;
 
         public PatchableAttribute(bool patchable=true)
         {
             Patchable = patchable;
+            From = null;
+            To = null;
+        }
+
+        public PatchableAttribute(double fromVersion, double toVersion)
+        {
+            Patchable = true;
+            From = fromVersion;
+            To = toVersion;
+        }
+
+        public PatchableAttribute(double fromVersion)
+        {
+            Patchable = true;
+            From = fromVersion;
+            To = null;
         }
     }
 }

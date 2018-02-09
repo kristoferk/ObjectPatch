@@ -1,19 +1,22 @@
-﻿using SimpleObjectPatch;
-using System;
+﻿using System;
+using SimpleObjectPatch;
 
-namespace ExampleApiWeb.Model
+namespace ExampleApiWeb.Framework.Models
 {
     public class Customer
     {
         public int Id { get; set; }
 
-        [Patchable]
+
         public string Name { get; set; }
 
-        [Patchable]
+
         public string Description { get; set; } = "Default description";
 
-        [Patchable(false)]
+
+        public string Alias { get; set; }
+
+
         public int Page { get; set; } = 1;
         public int PageSize { get; set; } = 1000;
 
