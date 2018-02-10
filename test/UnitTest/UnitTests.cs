@@ -78,18 +78,46 @@ namespace UnitTest
             };
 
             //PatchObject<CustomerDto>
-            var newObject = new PatchObject<CustomerDto>(input).Patch(original, 
-                c => c.Notes, 
-                c => c.Alias);
+            new PatchObject<CustomerDto>(input)
+                .Patch(ref original,
+                    c => c.Notes, 
+                    c => c.Alias);
 
             //Explicit patchable but not specified
-            Assert.True(newObject.Description == "OldDesc");
+            Assert.True(original.Description == "OldDesc");
 
             //Implicit patchable and specified
-            Assert.True(newObject.Notes == "Notes");
+            Assert.True(original.Notes == "Notes");
 
             //Explicit NOT patchable but specified
-            Assert.True(newObject.Alias == "Alias");
+            Assert.True(original.Alias == "Alias");
+        }
+
+        [Fact]
+        public void PatchForSpecificVersion()
+        {
+            var original = new CustomerDto {
+                NewAttributeIn15 = string.Empty,
+                RemovedAttributeIn15 = "Test"
+            };
+
+            var input = new CustomerDto {
+                NewAttributeIn15 = "Test",
+                RemovedAttributeIn15 = "Test2"
+            };
+
+            //NewAttribute
+            var newObject = new PatchObject<CustomerDto>(input, 1.4M).Patch(original);
+            Assert.True(newObject.NewAttributeIn15 == string.Empty);
+            Assert.True(newObject.RemovedAttributeIn15 == "Test2");
+
+            var newObject2 = new PatchObject<CustomerDto>(input, 1.5M).Patch(original);
+            Assert.True(newObject2.NewAttributeIn15 == "Test");
+            Assert.True(newObject2.RemovedAttributeIn15 == "Test2");
+
+            var newObject3 = new PatchObject<CustomerDto>(input, 1.6M).Patch(original);
+            Assert.True(newObject3.NewAttributeIn15 == "Test");
+            Assert.True(newObject3.RemovedAttributeIn15 == "Test");
         }
     }
 }

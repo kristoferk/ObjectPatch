@@ -17,16 +17,16 @@ namespace ExampleApiWeb.Api.v1.Controllers
     [Route("api/v1/[controller]")]
     public class CustomersController : Controller
     {
+        private readonly ApiPatchService _service;
         private readonly CustomerRepository _repository;
         private readonly IMapper _mapper;
-        private readonly Validator _validator;
         private readonly IAuthorizationService _authorizationService;
 
-        public CustomersController(CustomerRepository repository, IMapper mapper, Validator validator, IAuthorizationService authorizationService)
+        public CustomersController(ApiPatchService service, CustomerRepository repository, IMapper mapper, Validator validator, IAuthorizationService authorizationService)
         {
+            _service = service;
             _repository = repository;
             _mapper = mapper;
-            _validator = validator;
             _authorizationService = authorizationService;
         }
 
@@ -52,12 +52,7 @@ namespace ExampleApiWeb.Api.v1.Controllers
         [HttpPost]
         public async Task<CustomerDto> Post([FromBody] PatchObject<CustomerDto> value)
         {
-            var dto = value.Create();
-            _validator.ValidateAndThrow(dto, RuleSet.Add);
-            var newCustomer = _mapper.Map<Customer>(dto);
-            await _authorizationService.AssertAuthorizeAsync(User, newCustomer, Requirements.Create);
-            var dbObject = await _repository.CreateAsync(newCustomer);
-            return _mapper.Map<CustomerDto>(dbObject);
+            return await _service.Post<CustomerDto, Customer>(value, User, async c => await _repository.CreateAsync(c));
         }
 
         //PUT api/customers/5
@@ -65,15 +60,8 @@ namespace ExampleApiWeb.Api.v1.Controllers
         public async Task<CustomerDto> Put(int id, [FromBody]PatchObject<CustomerDto> value)
         {
             CheckRequestIdentity.AssertEqualId(id, value.Data.Id, i => value.Data.Id = i);
-
-            Customer original = _repository.Get(value.Data.Id);
-            CustomerDto dto = _mapper.Map<CustomerDto>(original);
-            dto = value.Patch(dto);
-            _validator.ValidateAndThrow(dto, RuleSet.Update);
-            original = _mapper.Map<Customer>(dto);
-            await _authorizationService.AssertAuthorizeAsync(User, original, Requirements.Update);
-            original = await _repository.UpdateAsync(original);
-            return _mapper.Map<CustomerDto>(original);
+            Customer original = await _repository.GetAsync(value.Data.Id);
+            return await _service.Put(value, User, original, async c => await _repository.UpdateAsync(c));
         }
 
         // DELETE api/customers/5
@@ -82,10 +70,11 @@ namespace ExampleApiWeb.Api.v1.Controllers
         {
             value = value ?? new CustomerDto();
             CheckRequestIdentity.AssertEqualId(id, value.Id, i => value.Id = i);
-            _validator.ValidateAndThrow(value, RuleSet.Delete);
-            await _authorizationService.AssertAuthorizeAsync(User, value, Requirements.Delete);
-            await _repository.DeleteAsync(id, hardDelete);
-            return true;
+            
+            return await _service.Delete(value, User, async () => {
+                await _repository.DeleteAsync(id, hardDelete);
+                return true;
+            });
         }
     }
 }

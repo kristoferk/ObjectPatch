@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Patch input from REST calls</Description>
     <AssemblyTitle>SimpleObjectPatch</AssemblyTitle>
-    <TargetFrameworks>net451;netstandard1.4</TargetFrameworks>
+    <TargetFrameworks>net451;netstandard1.5</TargetFrameworks>
     <AssemblyName>SimpleObjectPatch</AssemblyName>
     <PackageId>SimpleObjectPatch</PackageId>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.5' ">1.6.0</NetStandardImplicitPackageVersion>

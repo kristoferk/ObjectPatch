@@ -22,10 +22,10 @@ namespace UnitTest
             var customer = JsonConvert.DeserializeObject<Customer>(await response.Content.ReadAsStringAsync());
 
             //Description is patchable and should be changed
-            Assert.True(customer.Description == "Desc");
+            Assert.Equal("Desc", customer.Description);
 
             //Description is NOT patchable and should not be changed
-            Assert.True(customer.Alias != "Desc2");
+            Assert.NotEqual("Desc2", customer.Alias);            
         }
 
         [Fact]

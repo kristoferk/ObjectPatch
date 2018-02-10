@@ -17,11 +17,13 @@ namespace SimpleObjectPatch
             _serializer = serializer ?? new JsonSerializer();
         }
 
-        public T ApplyPatch<T>(JObject input, T original, params Expression<Func<T, object>>[] actions) where T : class, new()
+        public T ApplyPatch<T>(JObject input, decimal? version, T original, params Expression<Func<T, object>>[] actions) where T : class, new()
         {
             PropertyInfo[] allPropertiesOnType = typeof(T).GetTypeInfo().DeclaredProperties.ToArray();
             T objectFromInput = input.ToObject<T>(_serializer);
-            var propertyNames = GetPatchablePropertyNames(actions, allPropertiesOnType);
+
+
+            var propertyNames = GetPatchablePropertyNames(version, actions, allPropertiesOnType);
 
             //Properties in dynamic object
             foreach (var prop in input.Properties())
@@ -32,11 +34,7 @@ namespace SimpleObjectPatch
                     var actualProperty = allPropertiesOnType.First(f => f.Name == propertyName);
                     if (actualProperty.CanWrite)
                     {
-                        //var patchable = actualProperty.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
-                        //if (patchable == null || patchable.Patchable)
-                        //{
-                            actualProperty.SetValue(original, actualProperty.GetValue(objectFromInput));
-                        //}                        
+                        actualProperty.SetValue(original, actualProperty.GetValue(objectFromInput));
                     }
                 }
             }
@@ -44,7 +42,7 @@ namespace SimpleObjectPatch
             return original;
         }
 
-        private static List<string> GetPatchablePropertyNames<T>(Expression<Func<T, object>>[] actions, PropertyInfo[] allPropertiesOnType) where T : class, new()
+        private static List<string> GetPatchablePropertyNames<T>(decimal? version, Expression<Func<T, object>>[] actions, PropertyInfo[] allPropertiesOnType) where T : class, new()
         {
             var patchablePropertyNames = new List<string>();
             if (actions.Any())
@@ -58,6 +56,21 @@ namespace SimpleObjectPatch
                     var patchable = property.GetCustomAttributes(typeof(PatchableAttribute), false).Cast<PatchableAttribute>().FirstOrDefault();
                     if (patchable == null || patchable.Patchable)
                     {
+                        if (patchable != null && version.HasValue)
+                        {                            
+                            double versionAsDouble = (double)version.Value;
+
+                            if (versionAsDouble < patchable.From)
+                            {
+                                continue;
+                            }
+
+                            if (versionAsDouble > patchable.To)
+                            {
+                                continue;
+                            }
+                        }
+                        
                         patchablePropertyNames.Add(property.Name);
                     }
                 }

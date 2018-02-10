@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using ExampleApiWeb.Api;
 using ExampleApiWeb.Framework.Models;
 
 namespace ExampleApiWeb
@@ -53,10 +54,14 @@ namespace ExampleApiWeb
             services.AddMvc();
             services.AddAuthorization();
             services.AddSingleton(mapper);
+        
 
             services.AddScoped<IAuthorizationHandler, CustomAuthorizationHandler>();
             services.AddScoped<CustomerRepository, CustomerRepository>();
             services.AddScoped<Validator, Validator>();
+            services.AddSingleton<ApiPatchService>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

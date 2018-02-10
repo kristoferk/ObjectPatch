@@ -19,7 +19,10 @@ namespace ExampleApiWeb.Api.v1.Contracts
         public string Alias { get; set; }
 
         [Patchable(1.5)]
-        public string NewAttribute { get; set; }
+        public string NewAttributeIn15 { get; set; }
+
+        [Patchable(0, 1.5)]
+        public string RemovedAttributeIn15 { get; set; }
 
         [Patchable(false)]
         public int Page { get; set; } = 1;
@@ -41,6 +44,17 @@ namespace ExampleApiWeb.Api.v1.Contracts
         public DateTimeOffset? StartOffset { get; set; }
 
         public DateTimeOffset EndOffset { get; set; }
+
+        public ObjectReference Parent { get; set; }
+    }
+
+    
+    public class ObjectReference
+    {
+        public int Id { get; set; }
+
+        [Patchable(false)]
+        public int Name { get; set; }
     }
 
     public enum TestType
